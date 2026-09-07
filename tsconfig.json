@@ -7,9 +7,12 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
+    "types": [],
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests"],
+  "paths": {},
+  "typeRoots": []
 }

@@ -13,7 +13,7 @@ import { shallow } from 'zustand/shallow'
 import { freeze, produce } from 'immer'
 import type {
   ActionsDecl, BakedActions, ObservableSnapshot, StoreHandle, StoreInstance, StoreSpec,
-} from './contract.ts'
+} from './store-contract.ts'
 
 // Store contract types are ui-slots authority; re-exported beside the engine
 // so store consumers get one import path.
@@ -21,7 +21,7 @@ export type {
   ActionsDecl, BakedActions, BoundActions, DefineStore, HandleOf, MaybeSnapshotSelectorHook,
   ObservableSnapshot, PropsStore, SnapshotSelectorHook, StoreDecl, StoreFactory,
   StoreHandle, StoreInstance, StoreSpec,
-} from './contract.ts'
+} from './store-contract.ts'
 
 /** Writable snapshot store (bare data face; React selector hooks are synthesized in ui-renderer). */
 export interface SnapshotStore<T> extends ObservableSnapshot<T> {

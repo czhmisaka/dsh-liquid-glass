@@ -43,8 +43,6 @@ export interface EngineStoreHandle<S, A> {
   subscribe: (listener: () => void) => () => void
   getSnapshot: () => S
   actions: A
-  /** Internal: replace the whole state (framework binding detail). */
-  setState: (next: S) => void
 }
 
 /**
@@ -63,12 +61,6 @@ export function createLiquidGlassStore(): EngineStoreHandle<LiquidGlassState, Li
     getSnapshot(): LiquidGlassState {
       return state
     },
-    // Placeholder; the real useStore binding is supplied by the renderer's
-    // PropsStore seat, which wraps this handle per component.
-    setState(next: S): void {
-      state = next
-      for (const listener of listeners) listener()
-    },
     actions: {} as LiquidGlassActions,
   }
   handle.actions = {
@@ -78,8 +70,9 @@ export function createLiquidGlassStore(): EngineStoreHandle<LiquidGlassState, Li
       value: LiquidGlassSettings | undefined,
       revision: number,
     ): void {
-      if (revision <= draft.revision) return
-      handle.setState({ status, value, revision })
+      if (revision <= state.revision) return
+      state = { status, value, revision }
+      for (const listener of listeners) listener()
     },
   }
   return handle

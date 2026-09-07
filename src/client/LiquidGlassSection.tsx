@@ -1,6 +1,6 @@
 /** Liquid Glass settings section: enable toggle plus live parameter controls. */
-import type { InjectFace, PropsLocale, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
-import type { createLiquidGlassStore } from './settings-store.ts'
+import type { InjectFace, PropsLocale, PropsRuntime, PropsStore } from '../types/harness-globals.d.ts'
+import type { createLiquidGlassStore, LiquidGlassState } from './settings-store.ts'
 import css from './LiquidGlassSection.module.css'
 
 /** Injected business face: durable parameter writes (the apply chain re-applies them). */
@@ -41,7 +41,7 @@ function randomGradientPair(): [string, string] {
 
 /** Render the Liquid Glass page. */
 export function LiquidGlassSection({ t, useStore, set, setMany }: LiquidGlassSectionProps) {
-  const { status, value } = useStore(s => s)
+  const { status, value } = useStore((s: LiquidGlassState) => s)
 
   return (
     <div className={css.section}>

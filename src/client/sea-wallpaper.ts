@@ -22,6 +22,8 @@ interface SeaInstance {
   setColors?: (colorA: readonly number[] | undefined, colorB: readonly number[] | undefined) => void
   clearColors?: () => void
   setEffects?: (e: { cols?: number; bright?: number; flicker?: number; foamAmount?: number }) => void
+  setStyle?: (style: 'zeabur' | 'ghibli') => void
+  setView?: (view: 'side' | 'top') => void
   setPlacement?: (x: number, y: number, w: number, h: number) => void
 }
 
@@ -45,6 +47,10 @@ export interface SeaWallpaperParams {
   foam?: boolean
   /** Foam intensity multiplier, 0-1.5. */
   foamAmount?: number
+  /** Sea style: data sea (zeabur) or ghibli anime waves. */
+  seaStyle?: 'zeabur' | 'ghibli'
+  /** Ghibli camera view; ignored by the data sea. */
+  seaView?: 'side' | 'top'
 }
 
 /** The sea global the injected IIFE defines. */
@@ -171,6 +177,8 @@ export function mountSeaWallpaper(params: SeaWallpaperParams): void {
     ...(colorB !== undefined ? { colorB } : {}),
   })
   pushDigitEffects(params)
+  instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
+  instance.setView?.(params.seaView === 'top' ? 'top' : 'side')
   // Join the screen-anchored ocean: poll own viewport, render own slice.
   startPlacementLoop()
 }
@@ -191,6 +199,8 @@ export function updateSeaWallpaper(params: SeaWallpaperParams): void {
     instance.clearColors?.()
   }
   pushDigitEffects(params)
+  instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
+  instance.setView?.(params.seaView === 'top' ? 'top' : 'side')
 }
 
 /** Push the digit/foam effect parameters to the live instance. */

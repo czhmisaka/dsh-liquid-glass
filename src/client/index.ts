@@ -8,20 +8,7 @@
  * (body attribute, wallpaper instance, blur CSS variables); every scope write
  * re-applies, so slider changes land immediately and survive restarts.
  */
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { BoundActions } from '@deepseek-ai/dsh-client-store'
-// Type-only: the ctx.theme Context merge and ThemeRuntime.
-import type {} from '@deepseek-ai/dsh-client-ui-theme/client'
-import type { ThemeRuntime } from '@deepseek-ai/dsh-client-ui-theme/client'
-// Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-// Type-only: the settings section slot declaration.
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-// Type-only: the ctx.slots SlotRegistry merge (the register/inject seats).
-import type {} from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-// Type-only: the ctx.remote Context merge with the generated usage namespace.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type { ClientContext, ThemeRuntime, BoundActions, JsonValue } from '../types/harness-globals.d.ts'
 import glassCss from './glass.css?inline'
 import { GLASS_TOKENS } from './tokens.ts'
 import { mountSeaWallpaper, unmountSeaWallpaper, updateSeaWallpaper } from './sea-wallpaper.ts'
@@ -54,13 +41,6 @@ export const LIQUID_GLASS_THEME: GlassThemeDefinition = {
   tokens: GLASS_TOKENS,
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
-  interface LocaleNamespaceMap {
-    /** The liquid glass settings page's copy. */
-    'liquid-glass': import('./locales.ts').LiquidGlassLocaleKey
-  }
-}
-
 /** Mount the glass effects stylesheet for the owning plugin lifetime. */
 function installGlassStyles(ctx: ClientContext): void {
   if (typeof document === 'undefined') return
@@ -89,6 +69,8 @@ function applyParams(theme: ThemeRuntime, params: LiquidGlassSettings): void {
       digitFlicker: params.digitFlicker,
       foam: params.foam,
       foamAmount: params.foamAmount,
+      seaStyle: params.seaStyle,
+      seaView: params.seaView,
     }
     // Mount is idempotent; update applies every parameter live (palette with
     // its built-in fade, flow speed, and custom band colors), so control
@@ -159,7 +141,7 @@ export function apply(ctx: ClientContext): void {
     label: () => t('nav'),
     locale: SETTINGS_NS,
     store,
-    inject: (actions) => {
+    inject: (actions: BoundActions<typeof store>) => {
       bound = actions
       // The component mounts after the first sync; catch it up here.
       sync()
@@ -168,7 +150,7 @@ export function apply(ctx: ClientContext): void {
         // One atomic write for correlated field groups (the random color
         // pair); three queued single-field sets race per-field recoveries.
         setMany: (values: Record<string, unknown>) => {
-          void scope.mutate(Object.entries(values).map(([field, value]) => ({ op: 'set' as const, path: [field], value: value as import('@deepseek-ai/dsh-util-values').JsonValue })))
+          void scope.mutate(Object.entries(values).map(([field, value]) => ({ op: 'set' as const, path: [field], value: value as JsonValue })))
         },
       }
     },
