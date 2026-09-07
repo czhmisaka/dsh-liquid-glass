@@ -250,7 +250,7 @@ function stopPaneTracking(): void {
 function startRefraction(): void {
   if (refract !== undefined || instance === undefined) return
   const canvas = instance.canvas
-  refract = createRefractionPass(canvas, () => paneRectsCache, { refract: 42, dispersion: 3.2, zIndex: 0 })
+  refract = createRefractionPass(canvas, () => paneRectsCache, { refract: 42, dispersion: 3.2, zIndex: 1 })
 }
 function stopRefraction(): void {
   refract?.destroy()
