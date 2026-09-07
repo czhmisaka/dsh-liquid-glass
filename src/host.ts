@@ -37,6 +37,8 @@ export interface LiquidGlassSettingsShape {
   foamAmount: number
   /** Sea style: data sea (zeabur) or ghibli anime waves. */
   seaStyle: string
+  /** WebGL refraction pass over the sea inside glass panes. */
+  refraction: boolean
 }
 
 /** Loader schema of the durable liquid glass parameter section. */
@@ -56,6 +58,7 @@ export const LiquidGlassSettingsSchema = z.object({
   foam: z.boolean().default(LIQUID_GLASS_DEFAULTS.foam),
   foamAmount: z.number().min(0).max(1.5).default(LIQUID_GLASS_DEFAULTS.foamAmount),
   seaStyle: z.string().default(LIQUID_GLASS_DEFAULTS.seaStyle),
+  refraction: z.boolean().default(LIQUID_GLASS_DEFAULTS.refraction),
 }) as unknown as z<LiquidGlassSettingsShape>
 
 /**

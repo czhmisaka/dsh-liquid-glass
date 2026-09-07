@@ -170,6 +170,22 @@ export function LiquidGlassSection({ t, useStore, set, setMany }: LiquidGlassSec
               })}
             </div>
           </section>
+          <section className={css.card} aria-label={t('refract.title')}>
+            <div className={css.rowHead}>
+              <div>
+                <div className={css.rowTitle}>{t('refract.title')}</div>
+                <div className={css.rowHint}>{t('refract.hint')}</div>
+              </div>
+              <button
+                type='button'
+                className={css.toggle}
+                aria-pressed={value.refraction}
+                onClick={() => { set('refraction', !value.refraction) }}
+              >
+                {value.refraction ? t('enable.on') : t('enable.off')}
+              </button>
+            </div>
+          </section>
           <section className={css.card} aria-label={t('digit.title')}>
             <div className={css.rowTitle}>{t('digit.title')}</div>
             <div className={css.sliderRow}>

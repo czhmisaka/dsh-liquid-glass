@@ -44,6 +44,8 @@ export interface LiquidGlassSettings {
   foamAmount: number
   /** Sea style: data sea (zeabur) or ghibli anime waves. */
   seaStyle: 'zeabur' | 'ghibli'
+  /** WebGL refraction pass over the sea inside glass panes. */
+  refraction: boolean
 }
 
 /** Default parameter values (the schema's defaults mirror these). */
@@ -63,6 +65,7 @@ export const LIQUID_GLASS_DEFAULTS: LiquidGlassSettings = {
   foam: true,
   foamAmount: 1,
   seaStyle: 'zeabur',
+  refraction: true,
 }
 
 /** Sea theme options in display order. */
