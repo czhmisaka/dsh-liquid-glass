@@ -30,15 +30,19 @@ body[data-ds-glass] {
   background: rgb(4 7 14 / 10%);
 }
 
-/* The app frame rides above the wallpaper. */
-body[data-ds-glass] > [class*='_frame_'] {
+/* The app frame rides above the wallpaper. With glass on, the frame becomes
+   a padded flex container so the columns float as cards with sea gaps. */
+body[data-ds-glass] > [class*=frame] {
   position: relative;
+  background: transparent;
+  padding: 0;
+  gap: 20px;
   z-index: 1;
 }
 
 /* Sidebar column: a floating rounded-rect glass card with margins on all
    sides, so the sea stays visible around it and the slab reads as glass. */
-body[data-ds-glass] [class*='_sidebarCol_'] {
+body[data-ds-glass] [class*=sidebarCol] {
   margin: 20px;
   border-radius: 20px;
   border: 0.5px solid rgb(255 255 255 / 18%);
@@ -53,8 +57,8 @@ body[data-ds-glass] [class*='_sidebarCol_'] {
 }
 
 /* Center and details columns get a whisper of blur so cards float. */
-body[data-ds-glass] [class*='_centerCol_'],
-body[data-ds-glass] [class*='_detailsCol_'] {
+body[data-ds-glass] [class*=centerCol],
+body[data-ds-glass] [class*=detailsCol] {
   margin: 20px 20px 20px 0;
   border-radius: 20px;
   border: 0.5px solid rgb(255 255 255 / 14%);
@@ -82,8 +86,8 @@ body[data-ds-glass] [data-shell-overlay] > * {
 }
 
 /* Cards and raised panes across features turn into frosted panes. */
-body[data-ds-glass] [class*='_card_'],
-body[data-ds-glass] [class*='_panel_']:not([data-shell-overlay]) {
+body[data-ds-glass] [class*=_card_],
+body[data-ds-glass] [class*=_panel_]:not([data-shell-overlay]) {
   backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
   -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
 }
@@ -92,4 +96,19 @@ body[data-ds-glass] [class*='_panel_']:not([data-shell-overlay]) {
 body[data-ds-glass] dialog {
   backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
   -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
+}
+
+/* Glass mode: the frame must not paint an opaque sheet over the sea — the
+   columns themselves are the glass. */
+body[data-ds-glass] [class*=frame] {
+  background: transparent;
+  gap: 20px;
+}
+
+/* Columns: floating rounded-rect glass cards, 20px sea margin all around. */
+body[data-ds-glass] [class*=sidebarCol] {
+  margin: 20px 0 20px 20px;
+}
+body[data-ds-glass] [class*=centerCol] {
+  margin: 20px 20px 20px 0;
 }
