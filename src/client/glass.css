@@ -36,8 +36,17 @@ body[data-ds-glass] > [class*='_frame_'] {
   z-index: 1;
 }
 
-/* Sidebar column: the thinnest pane, blurred over the wallpaper. */
+/* Sidebar column: a floating rounded-rect glass card with margins on all
+   sides, so the sea stays visible around it and the slab reads as glass. */
 body[data-ds-glass] [class*='_sidebarCol_'] {
+  margin: 20px;
+  border-radius: 20px;
+  border: 0.5px solid rgb(255 255 255 / 18%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    inset 0 -1px 0 rgb(255 255 255 / 8%),
+    0 10px 36px rgb(0 0 0 / 30%);
+  overflow: hidden;
   backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
   -webkit-backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
   background: var(--dsw-specific-sidebar-fill);
@@ -46,8 +55,15 @@ body[data-ds-glass] [class*='_sidebarCol_'] {
 /* Center and details columns get a whisper of blur so cards float. */
 body[data-ds-glass] [class*='_centerCol_'],
 body[data-ds-glass] [class*='_detailsCol_'] {
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  margin: 20px 20px 20px 0;
+  border-radius: 20px;
+  border: 0.5px solid rgb(255 255 255 / 14%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    0 10px 36px rgb(0 0 0 / 26%);
+  overflow: hidden;
+  backdrop-filter: blur(3px) saturate(140%);
+  -webkit-backdrop-filter: blur(3px) saturate(140%);
 }
 
 /* Shell overlay occupants (dialogs, popovers, the usage bubble and panel). */
@@ -57,7 +73,6 @@ body[data-ds-glass] [data-shell-overlay] > * {
 }
 
 /* Specular edge: a light-catching inner hairline on glass panes. */
-body[data-ds-glass] [class*='_sidebarCol_'],
 body[data-ds-glass] [data-shell-overlay] > * {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 14%),

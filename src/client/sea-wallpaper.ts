@@ -7,7 +7,6 @@
  * global is defined exactly once per page.
  */
 import seaBackgroundScript from './sea-background-script.ts'
-import { createRefractionPass, type RefractionPass } from './refract-pass.ts'
 import type { SeaTheme } from '../liquid-glass-settings.ts'
 
 const WALLPAPER_SELECTOR = '[data-dsg-sea-wallpaper]'
@@ -22,6 +21,7 @@ interface SeaInstance {
   setTheme?: (theme: string) => void
   setSpeed?: (speed: number) => void
   setColors?: (colorA: readonly number[] | undefined, colorB: readonly number[] | undefined) => void
+  setPanes?: (panes: Array<{ x: number; y: number; w: number; h: number; radius: number }>) => void
   clearColors?: () => void
   setEffects?: (e: { cols?: number; bright?: number; flicker?: number; foamAmount?: number }) => void
   setStyle?: (style: 'zeabur' | 'ghibli') => void
@@ -30,7 +30,6 @@ interface SeaInstance {
 
 let instance: SeaInstance | undefined
 
-let refract: { destroy: () => void } | undefined
 let paneRectsCache: Array<{ x: number; y: number; w: number; h: number; radius: number }> = []
 
 /** One wallpaper parameter set: palette, flow speed, and the digital-sea effect dials. */
@@ -110,7 +109,7 @@ function applyScreenPlacement(): void {
   const viewportBottom = window.screenY + chromeY + window.innerHeight
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
   const place = computeScreenPlacement(viewportLeft, viewportBottom, dpr)
-  const key = place.x + ',' + place.y + ',' + place.w + ',' + place.h
+  const key = [place.x, place.y, place.w, place.h].join(',')
   if (key === lastPlacement) return
   lastPlacement = key
   instance.setPlacement?.(place.x, place.y, place.w, place.h)
@@ -181,14 +180,13 @@ export function mountSeaWallpaper(params: SeaWallpaperParams): void {
     ...(colorB !== undefined ? { colorB } : {}),
   })
   pushDigitEffects(params)
+  pushPaneUniforms()
   instance.setTheme?.(params.seaTheme)
   instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
   // Join the screen-anchored ocean: poll own viewport, render own slice.
   startPlacementLoop()
-  if (params.refraction !== false) {
-    startPaneTracking()
-    startRefraction()
-  }
+  if (params.refraction !== false) startPaneTracking()
+  pushPaneUniforms()
 }
 
 /**
@@ -207,8 +205,16 @@ export function updateSeaWallpaper(params: SeaWallpaperParams): void {
     instance.clearColors?.()
   }
   pushDigitEffects(params)
+  pushPaneUniforms()
   instance.setTheme?.(params.seaTheme)
   instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
+}
+
+/** Push the glass pane rects (css px) to the sea instance for in-shader refraction. */
+function pushPaneUniforms(): void {
+  if (instance === undefined) return
+  const panes = document.body.getAttribute('data-ds-glass') !== null ? paneRectsCache : []
+  instance.setPanes?.(panes)
 }
 
 /** Push the digit/foam effect parameters to the live instance. */
@@ -223,11 +229,12 @@ function pushDigitEffects(params: SeaWallpaperParams): void {
 }
 
 /** Known app pane selectors (sidebar column + center composer + details). */
-const PANE_SELECTORS = ["[class*='sidebarCol']"]
+const PANE_SELECTORS = ["[class*='sidebarCol']", "[class*='centerCol']", "[class*='detailsCol']"]
 
 /** Re-read the app pane rects (throttled; DOM reads are expensive). */
 let paneTimer: ReturnType<typeof setInterval> | undefined
 function startPaneTracking(): void {
+  if (paneTimer !== undefined) return
   const read = (): void => {
     const rects: Array<{ x: number; y: number; w: number; h: number; radius: number }> = []
     for (const sel of PANE_SELECTORS) {
@@ -235,33 +242,26 @@ function startPaneTracking(): void {
       if (el === null) continue
       const r = el.getBoundingClientRect()
       if (r.width < 40 || r.height < 40) continue
-      rects.push({ x: r.left, y: r.top, w: r.width, h: r.height, radius: 18 })
+      rects.push({ x: r.left, y: r.top, w: r.width, h: r.height, radius: 20 })
     }
     paneRectsCache = rects
   }
   read()
-  setInterval(read, 500)
+  paneTimer = setInterval(read, 500)
 }
 function stopPaneTracking(): void {
+  if (paneTimer !== undefined) {
+    clearInterval(paneTimer)
+    paneTimer = undefined
+  }
   paneRectsCache = []
 }
 
 /** Create the refraction pass bound to the current sea canvas. */
-function startRefraction(): void {
-  if (refract !== undefined || instance === undefined) return
-  const canvas = instance.canvas
-  refract = createRefractionPass(canvas, () => paneRectsCache, { refract: 42, dispersion: 3.2, zIndex: 1 })
-}
-function stopRefraction(): void {
-  refract?.destroy()
-  refract = undefined
-}
-
 /** Unmount the sea wallpaper and stop its animation. Idempotent. */
 export function unmountSeaWallpaper(): void {
   if (typeof document === 'undefined') return
   stopPlacementLoop()
-  stopRefraction()
   stopPaneTracking()
   document.querySelector(WALLPAPER_SELECTOR)?.remove()
   instance?.destroy()
