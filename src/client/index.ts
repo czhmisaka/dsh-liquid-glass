@@ -70,7 +70,6 @@ function applyParams(theme: ThemeRuntime, params: LiquidGlassSettings): void {
       foam: params.foam,
       foamAmount: params.foamAmount,
       seaStyle: params.seaStyle,
-      seaView: params.seaView,
     }
     // Mount is idempotent; update applies every parameter live (palette with
     // its built-in fade, flow speed, and custom band colors), so control

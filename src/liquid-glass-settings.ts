@@ -44,8 +44,6 @@ export interface LiquidGlassSettings {
   foamAmount: number
   /** Sea style: data sea (zeabur) or ghibli anime waves. */
   seaStyle: 'zeabur' | 'ghibli'
-  /** Ghibli camera view; ignored by the data sea. */
-  seaView: 'side' | 'top'
 }
 
 /** Default parameter values (the schema's defaults mirror these). */
@@ -65,7 +63,6 @@ export const LIQUID_GLASS_DEFAULTS: LiquidGlassSettings = {
   foam: true,
   foamAmount: 1,
   seaStyle: 'zeabur',
-  seaView: 'side',
 }
 
 /** Sea theme options in display order. */

@@ -169,21 +169,6 @@ export function LiquidGlassSection({ t, useStore, set, setMany }: LiquidGlassSec
                 )
               })}
             </div>
-            {value.seaStyle === 'ghibli' && (
-              <div className={css.optionRow}>
-                {(['side', 'top'] as const).map(view => (
-                  <button
-                    key={view}
-                    type='button'
-                    className={css.option}
-                    aria-pressed={value.seaView === view}
-                    onClick={() => { set('seaView', view) }}
-                  >
-                    {view === 'side' ? t('style.viewSide') : t('style.viewTop')}
-                  </button>
-                ))}
-              </div>
-            )}
           </section>
           <section className={css.card} aria-label={t('digit.title')}>
             <div className={css.rowTitle}>{t('digit.title')}</div>
