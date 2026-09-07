@@ -223,7 +223,7 @@ function pushDigitEffects(params: SeaWallpaperParams): void {
 }
 
 /** Known app pane selectors (sidebar column + center composer + details). */
-const PANE_SELECTORS = ["[class*='_sidebarCol_']", "[class*='_centerCol_']", "[class*='_detailsCol_']"]
+const PANE_SELECTORS = ["[class*='sidebarCol']"]
 
 /** Re-read the app pane rects (throttled; DOM reads are expensive). */
 let paneTimer: ReturnType<typeof setInterval> | undefined
@@ -250,7 +250,7 @@ function stopPaneTracking(): void {
 function startRefraction(): void {
   if (refract !== undefined || instance === undefined) return
   const canvas = instance.canvas
-  refract = createRefractionPass(canvas, () => paneRectsCache, { refract: 22, dispersion: 1.4, zIndex: 1 })
+  refract = createRefractionPass(canvas, () => paneRectsCache, { refract: 42, dispersion: 3.2, zIndex: 0 })
 }
 function stopRefraction(): void {
   refract?.destroy()

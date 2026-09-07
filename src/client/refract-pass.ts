@@ -23,6 +23,7 @@ uniform vec4 uPane;
 uniform float uRadius;
 uniform float uRefract;
 uniform float uDisp;
+uniform float uTime;
 out vec4 fragColor;
 void main() {
   vec2 css = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y);
@@ -30,7 +31,7 @@ void main() {
   vec2 local = css - (uPane.xy + half_);
   float cr = min(uRadius, min(half_.x, half_.y) * 0.5);
   vec2 q = abs(local) - (half_ - vec2(cr));
-  float sd = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - cornerR;
+  float sd = length(max(q, vec2(0.0))) + min(max(q.x, q.y), 0.0) - cr;
   float inside = 1.0 - smoothstep(-1.0, 1.0, sd);
   if (inside < 0.004) discard;
   float edgeDist = -sd;
@@ -42,8 +43,15 @@ void main() {
   vec2 uvG = clamp((css + dir * thickness * uRefract) / uViewport, vec2(0.001), vec2(0.999));
   vec2 uvB = clamp((css + dir * thickness * (uRefract + uDisp)) / uViewport, vec2(0.001), vec2(0.999));
   vec3 refr = vec3(texture(uSea, uvR).r, texture(uSea, uvG).g, texture(uSea, uvB).b);
-  float rim = smoothstep(0.7, 1.0, curve);
-  vec3 outc = refr * mix(0.94, 1.0, thickness) + vec3(0.92, 0.97, 1.0) * rim * 0.12;
+  // crisp specular rim at the pane edge + faint outer glow
+  float rim = smoothstep(0.90, 1.0, curve) - smoothstep(0.98, 1.0, curve);
+  float glow = smoothstep(0.86, 1.0, curve) * 0.5;
+  // moving reflection sweep: a slow bright band travelling down the pane
+  float sweep = pow(max(0.0, sin(local.y * 0.004 - uTime * 0.55)), 12.0) * 0.10;
+  vec3 outc = refr * mix(0.93, 1.0, thickness);
+  outc += vec3(0.95, 0.98, 1.0) * rim * 0.55;
+  outc += vec3(0.55, 0.75, 0.95) * glow * 0.08;
+  outc += vec3(1.0) * sweep;
   fragColor = vec4(outc, inside);
 }`
 
@@ -94,7 +102,7 @@ export function createRefractionPass(
   gl.useProgram(prog)
   const loc = (n: string): WebGLUniformLocation | null => gl.getUniformLocation(prog, n)
   const uSea = loc('uSea'), uRes = loc('uRes'), uViewport = loc('uViewport'), uPane = loc('uPane'),
-    uRadius = loc('uRadius'), uRefract = loc('uRefract'), uDisp = loc('uDisp')
+    uRadius = loc('uRadius'), uRefract = loc('uRefract'), uDisp = loc('uDisp'), uTime = loc('uTime')
   gl.uniform1i(uSea, 0)
   const aPos = gl.getAttribLocation(prog, 'aPos')
   gl.enableVertexAttribArray(0)
@@ -136,6 +144,7 @@ export function createRefractionPass(
         gl.uniform1f(uRadius, pane.radius ?? opts.radius ?? 22)
         gl.uniform1f(uRefract, opts.refract ?? 18)
         gl.uniform1f(uDisp, opts.dispersion ?? 1.4)
+        gl.uniform1f(uTime, (performance.timeOrigin + performance.now()) % 100000 / 1000)
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
       }
     }
