@@ -143,6 +143,48 @@ export function LiquidGlassSection({ t, useStore, set, setMany }: LiquidGlassSec
               onChange={(event) => { set('speed', Number(event.target.value)) }}
             />
           </section>
+          <section className={css.card} aria-label={t('style.title')}>
+            <div className={css.rowTitle}>{t('style.title')}</div>
+            <div className={css.optionRow}>
+              {([
+                ['zeabur', 'dark'],
+                ['zeabur', 'light'],
+                ['ghibli', 'day'],
+                ['ghibli', 'dusk'],
+              ] as const).map(([style, theme]) => {
+                const active = value.seaStyle === style && value.seaTheme === theme
+                const label = style === 'zeabur'
+                  ? (theme === 'dark' ? t('style.zeabur.dark') : t('style.zeabur.light'))
+                  : (theme === 'day' ? t('style.ghibli.day') : t('style.ghibli.dusk'))
+                return (
+                  <button
+                    key={style + theme}
+                    type='button'
+                    className={css.option}
+                    aria-pressed={active}
+                    onClick={() => { setMany({ seaStyle: style, seaTheme: theme }) }}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+            {value.seaStyle === 'ghibli' && (
+              <div className={css.optionRow}>
+                {(['side', 'top'] as const).map(view => (
+                  <button
+                    key={view}
+                    type='button'
+                    className={css.option}
+                    aria-pressed={value.seaView === view}
+                    onClick={() => { set('seaView', view) }}
+                  >
+                    {view === 'side' ? t('style.viewSide') : t('style.viewTop')}
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
           <section className={css.card} aria-label={t('digit.title')}>
             <div className={css.rowTitle}>{t('digit.title')}</div>
             <div className={css.sliderRow}>

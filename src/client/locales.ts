@@ -24,6 +24,13 @@ export type LiquidGlassLocaleKey =
   | 'digit.flicker'
   | 'digit.foam'
   | 'digit.foamAmount'
+  | 'style.title'
+  | 'style.zeabur.dark'
+  | 'style.zeabur.light'
+  | 'style.ghibli.day'
+  | 'style.ghibli.dusk'
+  | 'style.viewSide'
+  | 'style.viewTop'
   | 'speed.title'
   | 'colorWave.title'
   | 'opacity.title'
@@ -54,6 +61,13 @@ export const en: Record<LiquidGlassLocaleKey, string> = {
   'digit.flicker': 'Flicker speed',
   'digit.foam': 'Character foam',
   'digit.foamAmount': 'Foam amount',
+  'style.title': 'Sea style',
+  'style.zeabur.dark': 'Data sea · dark',
+  'style.zeabur.light': 'Data sea · warm',
+  'style.ghibli.day': 'Ghibli · day',
+  'style.ghibli.dusk': 'Ghibli · dusk',
+  'style.viewSide': 'Side view',
+  'style.viewTop': 'Top view',
   'speed.title': 'Band flow speed',
   'colorWave.title': 'Color wave',
   'opacity.title': 'Wallpaper opacity',
@@ -85,6 +99,13 @@ export const zh: Record<LiquidGlassLocaleKey, string> = {
   'digit.flicker': '闪烁速度',
   'digit.foam': '字符泡沫',
   'digit.foamAmount': '泡沫浓度',
+  'style.title': '海面风格',
+  'style.zeabur.dark': '数据海·暗紫',
+  'style.zeabur.light': '数据海·暖橙',
+  'style.ghibli.day': '吉卜力·白日',
+  'style.ghibli.dusk': '吉卜力·黄昏',
+  'style.viewSide': '侧视',
+  'style.viewTop': '俯视',
   'speed.title': '色带流速',
   'colorWave.title': '色彩波动',
   'opacity.title': '壁纸不透明度',
