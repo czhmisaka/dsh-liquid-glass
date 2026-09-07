@@ -1,0 +1,80 @@
+/* Liquid Glass structural effects — active only while body[data-ds-glass] is
+   set by the theme plugin. Token values (translucent fills) come from the
+   registered theme; this sheet adds what tokens cannot express: the aurora
+   base under the sea canvas, backdrop blur, and specular edges. */
+
+body[data-ds-glass] {
+  /* The aurora base behind the sea canvas (the canvas draws over it). */
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgb(48 62 120 / 55%) 0%, transparent 55%),
+    radial-gradient(100% 80% at 88% 12%, rgb(28 96 120 / 42%) 0%, transparent 58%),
+    radial-gradient(120% 120% at 82% 100%, rgb(84 48 140 / 38%) 0%, transparent 60%),
+    radial-gradient(90% 90% at 40% 100%, rgb(20 60 90 / 30%) 0%, transparent 55%),
+    #070b14;
+  background-attachment: fixed;
+}
+
+/* Sea wallpaper: the bottom-most layer (flowing color bands). A light scrim
+   keeps UI text readable above it; the canvas ignores pointer events. */
+[data-dsg-sea-wallpaper] {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+[data-dsg-sea-wallpaper]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(4 7 14 / 10%);
+}
+
+/* The app frame rides above the wallpaper. */
+body[data-ds-glass] > [class*='_frame_'] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Sidebar column: the thinnest pane, blurred over the wallpaper. */
+body[data-ds-glass] [class*='_sidebarCol_'] {
+  backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
+  background: var(--dsw-specific-sidebar-fill);
+}
+
+/* Center and details columns get a whisper of blur so cards float. */
+body[data-ds-glass] [class*='_centerCol_'],
+body[data-ds-glass] [class*='_detailsCol_'] {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Shell overlay occupants (dialogs, popovers, the usage bubble and panel). */
+body[data-ds-glass] [data-shell-overlay] > * {
+  backdrop-filter: blur(var(--dsg-blur-main, 26px)) saturate(170%);
+  -webkit-backdrop-filter: blur(var(--dsg-blur-main, 26px)) saturate(170%);
+}
+
+/* Specular edge: a light-catching inner hairline on glass panes. */
+body[data-ds-glass] [class*='_sidebarCol_'],
+body[data-ds-glass] [data-shell-overlay] > * {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    inset 1px 0 0 rgb(255 255 255 / 7%),
+    inset -1px 0 0 rgb(255 255 255 / 7%),
+    0 8px 32px rgb(0 0 0 / 25%);
+}
+
+/* Cards and raised panes across features turn into frosted panes. */
+body[data-ds-glass] [class*='_card_'],
+body[data-ds-glass] [class*='_panel_']:not([data-shell-overlay]) {
+  backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
+  -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
+}
+
+/* The settings dialog itself becomes the hero glass sheet. */
+body[data-ds-glass] dialog {
+  backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
+  -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
+}

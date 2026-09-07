@@ -1,0 +1,60 @@
+{
+  "name": "dsh-liquid-glass",
+  "description": "Liquid Glass theme for DeepSeek Harness: translucent frosted surfaces over a screen-anchored digital sea — flowing color bands, ascii digit rain, character-spray foam — continuous across browser windows",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czhmisaka/dsh-liquid-glass.git"
+  },
+  "main": "lib/index.mjs",
+  "exports": {
+    ".": "./lib/index.mjs",
+    "./client": "./lib/client.js"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "vitest run",
+    "prepack": "node scripts/build.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.1-rc.1 || ^0.1.2-alpha.0",
+    "@deepseek-ai/dsh-settings": ">=0.1.2-alpha.0",
+    "@deepseek-ai/schemastery": ">=0.1.2-alpha.0",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.1-rc.4",
+    "@deepseek-ai/dsh-settings": "^0.1.2-rc.1",
+    "@deepseek-ai/schemastery": "^3.18.2",
+    "@types/react": "^19.2.18",
+    "esbuild": "^0.25.12",
+    "immer": "^10.2.0",
+    "jsdom": "^30.0.1",
+    "react": "^18.3.1",
+    "vitest": "^3.0.0",
+    "zustand": "^5.0.15"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "liquid-glass",
+    "webgl",
+    "shader",
+    "theme",
+    "digital-sea"
+  ],
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
