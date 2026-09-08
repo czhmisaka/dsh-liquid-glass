@@ -106,6 +106,7 @@ body[data-ds-glass] [class*=frame] {
   margin: -20px;
   width: calc(100% + 40px);
   height: calc(100% + 40px);
+  grid-template-columns: calc(280px + 40px) 1fr 0px;
 }
 
 /* Columns: floating rounded-rect glass cards, 20px sea margin all around. */
