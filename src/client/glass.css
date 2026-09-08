@@ -103,6 +103,9 @@ body[data-ds-glass] dialog {
 body[data-ds-glass] [class*=frame] {
   background: transparent;
   gap: 20px;
+  margin: -20px;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
 }
 
 /* Columns: floating rounded-rect glass cards, 20px sea margin all around. */
