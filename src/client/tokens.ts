@@ -7,7 +7,7 @@
 /** Alias-token overrides keyed by variable name. */
 export const GLASS_TOKENS: Record<string, string> = {
   // Base: a deep blue-slate that lets the gradient wallpaper glow through.
-  '--dsw-alias-bg-base': 'rgba(10, 14, 24, 0.30)',
+  '--dsw-alias-bg-base': 'rgba(10, 14, 24, 0.00)',
   // Raised surfaces become thin translucent glass panes.
   '--dsw-alias-bg-layer-1': 'rgba(255, 255, 255, 0.045)',
   '--dsw-alias-bg-layer-2': 'rgba(255, 255, 255, 0.03)',
@@ -24,5 +24,5 @@ export const GLASS_TOKENS: Record<string, string> = {
   '--dsw-alias-state-success-primary': '#5ce2a8',
   '--dsw-alias-state-warn-primary': '#ffc06b',
   // The sidebar becomes the thinnest pane so the wallpaper shows through most.
-  '--dsw-specific-sidebar-fill': 'rgba(255, 255, 255, 0.025)',
+  '--dsw-specific-sidebar-fill': 'rgba(0, 0, 0, 0.35)',
 }
