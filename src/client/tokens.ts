@@ -24,5 +24,5 @@ export const GLASS_TOKENS: Record<string, string> = {
   '--dsw-alias-state-success-primary': '#5ce2a8',
   '--dsw-alias-state-warn-primary': '#ffc06b',
   // The sidebar becomes the thinnest pane so the wallpaper shows through most.
-  '--dsw-specific-sidebar-fill': 'rgba(0, 0, 0, 0.35)',
+  '--dsw-specific-sidebar-fill': 'rgba(0, 0, 0, 0.05)',
 }
