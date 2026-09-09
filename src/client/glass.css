@@ -36,24 +36,47 @@ body[data-ds-glass] > [class*=frame] {
   z-index: 1;
 }
 
-/* Sidebar column: backdrop blur over the wallpaper. */
+/* Sidebar column: backdrop blur over the wallpaper. The blur lives on an
+   absolute ::before layer, not the column itself: a backdrop-filter element
+   becomes the containing block for fixed-position descendants, and the
+   settings modal mounts inside this subtree — a column-level filter would
+   trap its full-viewport overlay in the sidebar box and squeeze the panel. */
 body[data-ds-glass] [class*=sidebarCol] {
-  backdrop-filter: blur(2px) saturate(150%);
-  -webkit-backdrop-filter: blur(2px) saturate(150%);
-  background: var(--dsw-specific-sidebar-fill);
+  position: relative;
+  z-index: 0;
 }
 
-/* Center and details columns get a whisper of blur so cards float. */
+body[data-ds-glass] [class*=sidebarCol]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(2px) saturate(150%);
+  background: var(--dsw-specific-sidebar-fill);
+  pointer-events: none;
+}
+
+/* Center and details columns get a whisper of blur so cards float — on a
+   ::before layer, for the same fixed-position reason as the sidebar. */
 body[data-ds-glass] [class*=centerCol],
 body[data-ds-glass] [class*=detailsCol] {
+  position: relative;
+  z-index: 0;
+}
+
+body[data-ds-glass] [class*=centerCol]::before,
+body[data-ds-glass] [class*=detailsCol]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
 }
 
 /* Shell overlay occupants (dialogs, popovers, the usage bubble and panel). */
 body[data-ds-glass] [data-shell-overlay] > * {
   backdrop-filter: blur(var(--dsg-blur-main, 26px)) saturate(170%);
-  -webkit-backdrop-filter: blur(var(--dsg-blur-main, 26px)) saturate(170%);
 }
 
 /* Specular edge: a light-catching inner hairline on glass panes. */
@@ -69,11 +92,9 @@ body[data-ds-glass] [data-shell-overlay] > * {
 body[data-ds-glass] [class*=_card_],
 body[data-ds-glass] [class*=_panel_]:not([data-shell-overlay]) {
   backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
-  -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) * 0.7)) saturate(140%);
 }
 
 /* The settings dialog itself becomes the hero glass sheet. */
 body[data-ds-glass] dialog {
   backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
-  -webkit-backdrop-filter: blur(calc(var(--dsg-blur-main, 26px) + 4px)) saturate(160%);
 }
