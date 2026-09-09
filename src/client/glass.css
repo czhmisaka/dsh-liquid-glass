@@ -38,8 +38,8 @@ body[data-ds-glass] > [class*=frame] {
 
 /* Sidebar column: backdrop blur over the wallpaper. */
 body[data-ds-glass] [class*=sidebarCol] {
-  backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--dsg-blur-main, 22px)) saturate(150%);
+  backdrop-filter: blur(2px) saturate(150%);
+  -webkit-backdrop-filter: blur(2px) saturate(150%);
   background: var(--dsw-specific-sidebar-fill);
 }
 
