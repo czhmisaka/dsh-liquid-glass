@@ -21,7 +21,6 @@ interface SeaInstance {
   setTheme?: (theme: string) => void
   setSpeed?: (speed: number) => void
   setColors?: (colorA: readonly number[] | undefined, colorB: readonly number[] | undefined) => void
-  setPanes?: (panes: Array<{ x: number; y: number; w: number; h: number; radius: number }>) => void
   clearColors?: () => void
   setEffects?: (e: { cols?: number; bright?: number; flicker?: number; foamAmount?: number }) => void
   setStyle?: (style: 'zeabur' | 'ghibli') => void
@@ -49,7 +48,6 @@ export interface SeaWallpaperParams {
   /** Whether the character-spray foam layer renders. */
   foam?: boolean
   /** WebGL refraction pass over the sea inside the glass panes. */
-  refraction?: boolean
   /** Foam intensity multiplier, 0-1.5. */
   foamAmount?: number
   /** Sea style: data sea (zeabur) or ghibli anime waves. */
@@ -180,13 +178,10 @@ export function mountSeaWallpaper(params: SeaWallpaperParams): void {
     ...(colorB !== undefined ? { colorB } : {}),
   })
   pushDigitEffects(params)
-  pushPaneUniforms()
   instance.setTheme?.(params.seaTheme)
   instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
   // Join the screen-anchored ocean: poll own viewport, render own slice.
   startPlacementLoop()
-  if (params.refraction !== false) startPaneTracking()
-  pushPaneUniforms()
 }
 
 /**
@@ -205,7 +200,6 @@ export function updateSeaWallpaper(params: SeaWallpaperParams): void {
     instance.clearColors?.()
   }
   pushDigitEffects(params)
-  pushPaneUniforms()
   instance.setTheme?.(params.seaTheme)
   instance.setStyle?.(params.seaStyle === 'ghibli' ? 'ghibli' : 'zeabur')
 }
@@ -262,7 +256,6 @@ function stopPaneTracking(): void {
 export function unmountSeaWallpaper(): void {
   if (typeof document === 'undefined') return
   stopPlacementLoop()
-  stopPaneTracking()
   document.querySelector(WALLPAPER_SELECTOR)?.remove()
   instance?.destroy()
   instance = undefined

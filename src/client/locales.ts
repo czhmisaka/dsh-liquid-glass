@@ -18,8 +18,6 @@ export type LiquidGlassLocaleKey =
   | 'colorA.title'
   | 'colorB.title'
   | 'color.random'
-  | 'refract.title'
-  | 'refract.hint'
   | 'digit.title'
   | 'digit.size'
   | 'digit.brightness'
@@ -66,8 +64,6 @@ export const en: Record<LiquidGlassLocaleKey, string> = {
   'style.zeabur.light': 'Data sea · warm',
   'style.ghibli.day': 'Ghibli · day',
   'style.ghibli.dusk': 'Ghibli · dusk',
-  'refract.title': 'Refraction',
-  'refract.hint': 'WebGL pass: the sea refracts through the glass panes with edge dispersion and a specular rim.',
   'speed.title': 'Band flow speed',
   'colorWave.title': 'Color wave',
   'opacity.title': 'Wallpaper opacity',
@@ -104,8 +100,6 @@ export const zh: Record<LiquidGlassLocaleKey, string> = {
   'style.zeabur.light': '数据海·暖橙',
   'style.ghibli.day': '吉卜力·白日',
   'style.ghibli.dusk': '吉卜力·黄昏',
-  'refract.title': '折射',
-  'refract.hint': 'WebGL 折射通道：海面透过玻璃面板产生位移、色散与亮边。',
   'speed.title': '色带流速',
   'colorWave.title': '色彩波动',
   'opacity.title': '壁纸不透明度',
